@@ -1,0 +1,25 @@
+initialize:
+  - run: |
+      set -e
+      nvm install 24
+      nvm use 24
+      npm ci
+maintenance:
+  - run: |
+      set -e
+      nvm use 24
+knowledge:
+  - name: setup
+    contents: |
+      nvm use 24 && npm ci
+  - name: lint
+    contents: |
+      nvm use 24 && npm run lint
+  - name: test
+    contents: |
+      nvm use 24 && npm run test:ci
+  - name: startup
+    contents: |
+      nvm use 24 && npm start
+      # Em seguida, abra http://localhost:4200
+      # Requer a API REST do Spring PetClinic em http://localhost:9966/petclinic/api/
