@@ -24,10 +24,13 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {PageNotFoundComponent} from './parts/page-not-found/page-not-found.component';
 import {WelcomeComponent} from './parts/welcome/welcome.component';
+import {LoginComponent} from './auth/login/login.component';
+import {authGuard} from './auth/auth.guard';
 
 const appRoutes: Routes = [
-  {path: 'welcome', component: WelcomeComponent},
-  {path: '', component: WelcomeComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'welcome', component: WelcomeComponent, canActivate: [authGuard]},
+  {path: '', component: WelcomeComponent, canActivate: [authGuard]},
   {path: '**', component: PageNotFoundComponent}
 ];
 
