@@ -34,6 +34,7 @@ import {VetsModule} from './vets/vets.module';
 import {PartsModule} from './parts/parts.module';
 import {SpecialtiesModule} from './specialties/specialties.module';
 import {HttpErrorHandler} from './error.service';
+import {AuthModule} from './auth/auth.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
@@ -52,6 +53,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     VetsModule,
     SpecialtiesModule,
     PartsModule,
+    AuthModule,
     BrowserAnimationsModule,
     AppRoutingModule
   ],

@@ -21,6 +21,8 @@
  */
 
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -30,4 +32,19 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
+  constructor(private authService: AuthService, private router: Router) {
+  }
+
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  get username(): string | null {
+    return this.authService.username;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

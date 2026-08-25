@@ -27,12 +27,13 @@ import {VetEditComponent} from './vet-edit/vet-edit.component';
 import {NgModule} from '@angular/core';
 import {VetResolver} from './vet-resolver';
 import {SpecResolver} from '../specialties/spec-resolver';
+import {guarded} from '../auth/auth.guard';
 
-const vetRoutes: Routes = [
+const vetRoutes: Routes = guarded([
   {path: 'vets', component: VetListComponent},
   {path: 'vets/add', component: VetAddComponent},
   {path: 'vets/:id/edit', component: VetEditComponent, resolve: {vet: VetResolver, specs: SpecResolver}}
-];
+]);
 
 @NgModule({
   imports: [RouterModule.forChild(vetRoutes)],

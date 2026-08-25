@@ -21,7 +21,7 @@
       <a class="navbar-brand" routerLink="/welcome" aria-label="Spring Petclinic home"><span></span></a>
 
       <div id="petclinicNavbar" class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto">
+        <ul class="navbar-nav me-auto" *ngIf="isAuthenticated">
           <li class="nav-item">
             <a class="nav-link" routerLink="/welcome" routerLinkActive="active" title="home page">
               <i class="bi bi-house-fill" aria-hidden="true"></i>
@@ -92,6 +92,18 @@
               <i class="bi bi-list-ul" aria-hidden="true"></i>
               <span> Specialties</span>
             </a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto" *ngIf="isAuthenticated">
+          <li class="nav-item">
+            <span class="nav-link">{{username}}</span>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" type="button" (click)="logout()" title="logout">
+              <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+              <span> Sair</span>
+            </button>
           </li>
         </ul>
       </div>

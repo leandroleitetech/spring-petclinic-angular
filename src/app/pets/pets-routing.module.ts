@@ -26,9 +26,10 @@ import {NgModule} from '@angular/core';
 import {VisitAddComponent} from '../visits/visit-add/visit-add.component';
 import {PetEditComponent} from './pet-edit/pet-edit.component';
 import {PetAddComponent} from './pet-add/pet-add.component';
+import {guarded} from '../auth/auth.guard';
 
 
-const petRoutes: Routes = [
+const petRoutes: Routes = guarded([
   {path: 'pets', component: PetListComponent},
   {path: 'pets/add', component: PetAddComponent},
   {
@@ -45,7 +46,7 @@ const petRoutes: Routes = [
     ]
   }
 
-];
+]);
 
 @NgModule({
   imports: [RouterModule.forChild(petRoutes)],
