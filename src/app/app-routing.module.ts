@@ -25,10 +25,16 @@ import {RouterModule, Routes} from '@angular/router';
 import {PageNotFoundComponent} from './parts/page-not-found/page-not-found.component';
 import {WelcomeComponent} from './parts/welcome/welcome.component';
 import {LoginComponent} from './auth/login/login.component';
+import {ChangePasswordComponent} from './auth/change-password/change-password.component';
+import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
+import {ResetPasswordComponent} from './auth/reset-password/reset-password.component';
 import {authGuard} from './auth/auth.guard';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
+  {path: 'change-password', component: ChangePasswordComponent, canActivate: [authGuard]},
+  {path: 'forgot-password', component: ForgotPasswordComponent},
+  {path: 'reset-password', component: ResetPasswordComponent},
   {path: 'welcome', component: WelcomeComponent, canActivate: [authGuard]},
   {path: '', component: WelcomeComponent, canActivate: [authGuard]},
   {path: '**', component: PageNotFoundComponent}

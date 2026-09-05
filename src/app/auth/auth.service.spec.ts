@@ -53,4 +53,33 @@ describe('AuthService', () => {
     expect(authService.isAuthenticated()).toBe(false);
     expect(authService.credentials).toBeNull();
   });
+
+  it('sends a PUT to change password', () => {
+    authService.changePassword('admin123', 'newpass123', 'newpass123').subscribe();
+
+    const req = httpTestingController.expectOne(`${environment.REST_API_URL}auth/password`);
+    expect(req.request.method).toEqual('PUT');
+    expect(req.request.body).toEqual({currentPassword: 'admin123', newPassword: 'newpass123', confirmPassword: 'newpass123'});
+    req.flush(null);
+  });
+
+  it('sends a password reset request and returns the token', () => {
+    authService.requestPasswordReset('admin').subscribe(response => {
+      expect(response.token).toEqual('reset-token');
+    });
+
+    const req = httpTestingController.expectOne(`${environment.REST_API_URL}auth/password-reset/request`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({username: 'admin'});
+    req.flush({token: 'reset-token'});
+  });
+
+  it('sends a password reset confirmation', () => {
+    authService.confirmPasswordReset('reset-token', 'newpass123', 'newpass123').subscribe();
+
+    const req = httpTestingController.expectOne(`${environment.REST_API_URL}auth/password-reset/confirm`);
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({token: 'reset-token', newPassword: 'newpass123', confirmPassword: 'newpass123'});
+    req.flush(null);
+  });
 });

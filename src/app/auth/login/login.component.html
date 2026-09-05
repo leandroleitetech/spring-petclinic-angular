@@ -15,6 +15,9 @@
         </div>
         <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
         <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid || submitting">Entrar</button>
+        <div class="mt-2">
+          <a routerLink="/forgot-password">Esqueci minha senha</a>
+        </div>
       </form>
     </div>
   </div>

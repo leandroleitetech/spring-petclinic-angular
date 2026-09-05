@@ -48,17 +48,33 @@ async function mockBackend(page: Page) {
       await route.fulfill({ json: [{ id: 1, name: 'radiology' }] });
       return;
     }
+    if (resource === 'auth/password-reset/request') {
+      await route.fulfill({ json: { token: 'mock-reset-token' } });
+      return;
+    }
+    if (resource === 'auth/password-reset/confirm' || resource === 'auth/password') {
+      await route.fulfill({ status: 204 });
+      return;
+    }
 
     await route.fulfill({ json: [] });
   });
 }
 
+async function login(page: Page) {
+  await page.goto('/petclinic/login');
+  await page.getByLabel('Usuário').fill('admin');
+  await page.getByLabel('Senha').fill('admin123');
+  await page.getByRole('button', { name: 'Entrar' }).click();
+  await expect(page).toHaveURL(/\/petclinic\/welcome$/);
+}
+
 test.beforeEach(async ({ page }) => {
   await mockBackend(page);
+  await login(page);
 });
 
 test('displays the Petclinic welcome page', async ({ page }) => {
-  await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Welcome to Petclinic' })).toBeVisible();
 });
 
@@ -146,7 +162,7 @@ test('displays backend data on list pages', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'George Franklin' })).toHaveCount(0);
 });
 test('desktop dropdowns open and navigate to owners and veterinarians', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/petclinic/welcome');
 
   await page.getByRole('button', { name: 'Owners' }).click();
   const ownersMenu = page.getByRole('button', { name: 'Owners' }).locator('..').locator('.dropdown-menu');
@@ -201,7 +217,7 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
     const pages = [
-      { path: '/', heading: 'Welcome to Petclinic' },
+      { path: '/petclinic/welcome', heading: 'Welcome to Petclinic' },
       { path: '/petclinic/owners', heading: 'Owners' },
       { path: '/petclinic/owners/1', heading: 'Owner Information' },
       { path: '/petclinic/owners/add', heading: 'New Owner' }
@@ -219,3 +235,29 @@ for (const viewport of [
     });
   });
 }
+
+test('navigates login -> forgot password -> reset password -> login', async ({ page }) => {
+  await page.goto('/petclinic/login');
+  await expect(page.getByRole('heading', { name: 'Entrar' })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Esqueci minha senha' }).click();
+  await expect(page).toHaveURL(/\/petclinic\/forgot-password$/);
+  await expect(page.getByRole('heading', { name: 'Recuperar senha' })).toBeVisible();
+
+  await page.getByLabel('Usuário').fill('admin');
+  await page.getByRole('button', { name: 'Enviar' }).click();
+  await expect(page).toHaveURL(/\/petclinic\/reset-password\?token=mock-reset-token$/);
+  await expect(page.getByRole('heading', { name: 'Redefinir senha' })).toBeVisible();
+
+  await page.getByRole('textbox', { name: 'Nova senha', exact: true }).fill('newpass123');
+  await page.getByRole('textbox', { name: 'Confirmação da nova senha', exact: true }).fill('newpass123');
+  await page.getByRole('button', { name: 'Redefinir senha' }).click();
+
+  await expect(page).toHaveURL(/\/petclinic\/login$/);
+  await expect(page.getByRole('heading', { name: 'Entrar' })).toBeVisible();
+
+  await page.getByLabel('Usuário').fill('admin');
+  await page.getByLabel('Senha').fill('newpass123');
+  await page.getByRole('button', { name: 'Entrar' }).click();
+  await expect(page).toHaveURL(/\/petclinic\/welcome$/);
+});
