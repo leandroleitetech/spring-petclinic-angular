@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 
@@ -14,7 +14,7 @@ export class ForgotPasswordComponent {
   errorMessage: string | null = null;
   submitting = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   onSubmit(): void {
@@ -34,6 +34,7 @@ export class ForgotPasswordComponent {
       error: () => {
         this.submitting = false;
         this.errorMessage = 'Não foi possível processar a solicitação';
+        this.changeDetectorRef.markForCheck();
       }
     });
   }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 
@@ -16,7 +16,7 @@ export class ResetPasswordComponent implements OnInit {
   success = false;
   submitting = false;
 
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) {
+  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -34,11 +34,13 @@ export class ResetPasswordComponent implements OnInit {
       next: () => {
         this.submitting = false;
         this.success = true;
+        this.changeDetectorRef.markForCheck();
         setTimeout(() => this.router.navigate(['/login']), 1500);
       },
       error: (err) => {
         this.submitting = false;
         this.errorMessage = err.error?.detail || 'Não foi possível redefinir a senha';
+        this.changeDetectorRef.markForCheck();
       }
     });
   }

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 
@@ -16,7 +16,7 @@ export class ChangePasswordComponent {
   success = false;
   submitting = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   onSubmit(): void {
@@ -29,11 +29,13 @@ export class ChangePasswordComponent {
         this.submitting = false;
         this.success = true;
         this.authService.logout();
+        this.changeDetectorRef.markForCheck();
         setTimeout(() => this.router.navigate(['/login']), 1500);
       },
       error: (err) => {
         this.submitting = false;
         this.errorMessage = err.error?.detail || 'Não foi possível alterar a senha';
+        this.changeDetectorRef.markForCheck();
       }
     });
   }

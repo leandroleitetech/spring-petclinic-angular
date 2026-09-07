@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 
@@ -15,7 +15,7 @@ export class LoginComponent {
   errorMessage: string | null = null;
   submitting = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   onSubmit(): void {
@@ -30,6 +30,7 @@ export class LoginComponent {
       error: () => {
         this.submitting = false;
         this.errorMessage = 'Usuário ou senha inválidos';
+        this.changeDetectorRef.markForCheck();
       }
     });
   }
