@@ -86,6 +86,7 @@ curl -s http://localhost:9966/petclinic/api/owners/11
 
 ## 5. Evidência
 
-Ao validar uma mudança, registre gravação de tela e/ou screenshots do fluxo acima (antes/depois
-quando for correção de bug) e anexe o resultado ao PR, junto com o resultado de `npm run lint` e
+Ao validar uma mudança, **grave um vídeo da tela (screen recording)** mostrando o fluxo acima
+(antes/depois quando for correção de bug) e anexe o vídeo ao PR. Screenshots complementares são
+bem-vindas, mas não substituem o vídeo. Inclua também o resultado de `npm run lint` e
 `npm run test:ci`.
